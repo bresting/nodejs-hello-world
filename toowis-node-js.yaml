@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: my-node-js
+  name: my-node-js
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: toowis-node-js
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        app: toowis-node-js
+    spec:
+      containers:
+      - image: reg.toowis.com:443/sandbox/toowis/node-hello-world:IMAGE_VERSION
+        name: node-hello-world
+        resources: {}
+status: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: toowis-node-js
+  labels:
+    app: toowis-node-js
+spec:
+  ports:
+  - protocol: TCP
+    nodePort: 30100
+    port: 80
+    targetPort: 80
+  selector:
+    app: toowis-node-js
+  type: NodePort
+status:
+  loadBalancer: {}
